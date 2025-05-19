@@ -28,12 +28,27 @@
           };
 
           pkgs-stable = import nixpkgs-stable { inherit system; };
+
+          create-pr-sb = pkgs.writeShellApplication {
+            name = "create-pr-sb";
+            runtimeInputs = [ pkgs.gh ];
+            text = builtins.readFile ./scripts/create-pr-sb.sh;
+          };
+
+          scripts = pkgs.symlinkJoin {
+            name = "scripts";
+            paths = [ create-pr-sb ];
+          };
         in
         {
           devShells = rec {
             default = spabreaks;
 
-            spabreaks = import ./spabreaks/default.nix { inherit pkgs pkgs-stable; };
+            spabreaks = import ./spabreaks/default.nix { inherit pkgs pkgs-stable scripts; };
+          };
+
+          apps = {
+            create-pr-sb = fu.lib.mkApp { drv = create-pr-sb; };
           };
         }
       );

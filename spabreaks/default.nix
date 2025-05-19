@@ -1,4 +1,4 @@
-{ pkgs, pkgs-stable, ... }:
+{ pkgs, pkgs-stable, scripts, ... }:
 
 let
   rubyVersionFile = builtins.readFile ./.ruby-version;
@@ -20,6 +20,7 @@ pkgs.mkShell
   buildInputs = [
     ruby
     rubyEnv
+    scripts
   ] ++ (with pkgs; [
     bundix
     elmPackages.elm
