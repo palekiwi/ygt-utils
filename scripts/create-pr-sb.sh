@@ -53,13 +53,6 @@ if [ -z "$ticket_number" ]; then
     exit 1
 fi
 
-ticket_number=$(echo "${branch_name}" | grep -o "^[0-9]\+")
-
-if [ -z "$ticket_number" ]; then
-    echo "Error: Branch name does not start with a number"
-    exit 1
-fi
-
 remaining="${branch_name#"${ticket_number}"-}"
 
 title="$(build_pr_title "$ticket_number" "$remaining")"
